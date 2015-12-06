@@ -4,7 +4,7 @@ Run Visual Studio as administrator,  open the solution and run the console app.
 
 Explanation
 -----------
-There are two HttpHandlers configured: a default handler, and one scoped inside a <location> tag.
+There are two HttpHandlers configured: a default handler, and one scoped inside a `<location>` tag.
 
 When concurrently hammering IIS and performing iisresets, sometimes requests will not hit the http handler that is inside the location tag, instead they will hit the default one.
 
