@@ -1,4 +1,4 @@
-Run SetUpWebSite.ps1 as admin. This configures a new website on port 81, a new web app, and a new app pool. The app pool runs as you so needs your local user credentials.
+Run HttpHandlerWebSite/SetUpWebSite.ps1 as admin. This configures a new website on port 81, a new web app, and a new app pool. The app pool runs as you so needs your local user credentials.
 
 Run Visual Studio as administrator,  open the solution and run the console app.
 
