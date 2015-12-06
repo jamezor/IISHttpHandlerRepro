@@ -12,3 +12,8 @@ When concurrently hammering IIS and performing iisresets, sometimes requests wil
 What should happen?
 -------------------
 Given the structure of the web.config, it should be impossible for the default handler to ever get hit when the requested path is "subpath".
+
+Reproduced on
+-------------
+Windows 10
+Visual Studio 2015 (with and without Update 1)
