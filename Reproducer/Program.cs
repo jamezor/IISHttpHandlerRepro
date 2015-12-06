@@ -13,7 +13,7 @@ namespace Reproducer
         static void Main()
         {
             ConfirmEverythingIsSetUp();
-            Console.WriteLine("Everything seems to be configured, lets start the test...");
+            Console.WriteLine("Everything seems to be configured. Let's start the test...");
 
             var clientThreads = StartClientThreads();
 
