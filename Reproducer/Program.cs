@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
+using System.Security.Principal;
 using System.Threading;
 
 namespace Reproducer
@@ -79,7 +80,13 @@ namespace Reproducer
 
         static void ConfirmEverythingIsSetUp()
         {
-            using(HttpClient client = new HttpClient())
+            var isAdmin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+            if (!isAdmin)
+            {
+                throw new InvalidOperationException("You must run this script with administrative privileges.");
+            }
+
+            using (HttpClient client = new HttpClient())
             {
                 var result = client.GetAsync(new Uri("http://localhost:81/HttpHandlerApp/")).GetAwaiter().GetResult();
                 var resultString = result.Content.ReadAsStringAsync().Result;
