@@ -1,4 +1,4 @@
-Run HttpHandlerWebSite/SetUpWebSite.ps1 as admin. This configures a new website on port 81, a new web app, and a new app pool. The script also builds the Reproducer project and displays the location of the compiled binary.
+Run HttpHandlerWebSite/SetUpWebSite.ps1 as admin. This configures a new website on port 81 an creates a new web application. The script also builds the Reproducer project and displays the location of the compiled binary.
 
 Run the Reproducer application (also as administrator) that the script built and watch the output. You should eventually see `Got the wrong result: This is the default handler`, which means that the bug has occurred.
 
