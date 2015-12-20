@@ -3,12 +3,12 @@
 #Install IIS and set up the website
 Enable-WindowsOptionalFeature -Online -FeatureName 'IIS-ASPNET45' -All
 ipmo WebAdministration
-New-Website -Force -PhysicalPath (resolve-path $PSScriptRoot\..) -Name HttpHandlerApp -Port 81
-New-WebApplication -Site HttpHandlerApp -PhysicalPath $PSScriptRoot -Name HttpHandlerWebSite
+New-Website -Force -PhysicalPath (resolve-path $PSScriptRoot\..) -Name HttpHandlerWebsite -Port 81
+New-WebApplication -Site HttpHandlerWebsite -PhysicalPath $PSScriptRoot -Name HttpHandlerApp
 icacls $PSScriptRoot\.. /grant "everyone:(OI)(CI)(RA,RD,X,S,GR)" /t
 iisreset
 
-#Install build tools
+#Install build tools - some warnings are expected
 $buildToolsExe = Join-Path $env:TEMP BuildTools_Full.exe
 Invoke-WebRequest -UseBasicParsing https://download.microsoft.com/download/E/E/D/EEDF18A8-4AED-4CE0-BEBE-70A83094FC5A/BuildTools_Full.exe -OutFile $buildToolsExe
 Start-Process -Wait -FilePath $buildToolsExe -ArgumentList '/Full', '/NoRestart', '/Passive'
