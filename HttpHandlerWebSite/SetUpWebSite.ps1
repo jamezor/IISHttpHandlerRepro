@@ -1,32 +1,22 @@
-﻿$siteName = 'HttpHandlerWebSite'
-$appName = 'HttpHandlerApp'
-$sitePath = Resolve-Path $PSScriptRoot\..
-$appPath = $PSScriptRoot
+﻿$ErrorActionPreference = 'Stop'
 
-$currentUser = "$($env:userdomain)\$($env:username)"
-
-$unmanagedString = [System.IntPtr]::Zero;
-try
-{
-    $unmanagedString = [Runtime.InteropServices.Marshal]::SecureStringToGlobalAllocUnicode((Read-Host -AsSecureString "Please enter your current user's password so we can run the app pool as you"))
-    $password = [Runtime.InteropServices.Marshal]::PtrToStringUni($unmanagedString)
-}
-finally
-{
-    [Runtime.InteropServices.Marshal]::ZeroFreeGlobalAllocUnicode($unmanagedString)
-}
-
-Set-AppPool $appName $currentUser $password
-
-Set-WebSite $siteName $appName $sitePath
-Set-WebSiteBindings $siteName @{protocol="http"; port=81}
-
-if(-not (Get-WebApplication -Site $siteName -Name $appName)) {
-    New-WebApplication -Site $siteName -Name $appName -PhysicalPath $appPath | Out-Null
-}
-$webAppPath = "IIS:\Sites\$($siteName)\$($appName)"
-Set-ItemProperty $webAppPath -Name applicationPool -Value $appName
-
-Set-WebConfigurationProperty -filter /system.WebServer/security/authentication/AnonymousAuthentication -name username -value "" -location $siteName
-
+#Install IIS and set up the website
+Enable-WindowsOptionalFeature -Online -FeatureName 'IIS-ASPNET45' -All
+ipmo WebAdministration
+New-Website -Force -PhysicalPath (resolve-path $PSScriptRoot\..) -Name HttpHandlerApp -Port 81
+New-WebApplication -Site HttpHandlerApp -PhysicalPath $PSScriptRoot -Name HttpHandlerWebSite
+icacls $PSScriptRoot\.. /grant "everyone:(OI)(CI)(RA,RD,X,S,GR)" /t
 iisreset
+
+#Install build tools
+$buildToolsExe = Join-Path $env:TEMP BuildTools_Full.exe
+Invoke-WebRequest -UseBasicParsing https://download.microsoft.com/download/E/E/D/EEDF18A8-4AED-4CE0-BEBE-70A83094FC5A/BuildTools_Full.exe -OutFile $buildToolsExe
+Start-Process -Wait -FilePath $buildToolsExe -ArgumentList '/Full', '/NoRestart', '/Passive'
+
+#Build the Reproducer project
+& 'C:\Program Files (x86)\MSBuild\14.0\Bin\amd64\msbuild.exe' $PSScriptRoot\..\IISHttpHandlerRepro.sln /v:q
+
+#List next instructions
+$reproducerPath = Resolve-Path $PSScriptRoot\..\Reproducer\bin\Debug\Reproducer.exe
+Write-Host -ForegroundColor Cyan "Setup complete."
+Write-Host -ForegroundColor Cyan "Now run Reproducer.exe in $reproducerPath as many times as you need to diagnose the issue."
