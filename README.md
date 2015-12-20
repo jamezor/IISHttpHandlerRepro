@@ -1,6 +1,6 @@
-Run HttpHandlerWebSite/SetUpWebSite.ps1 as admin. This configures a new website on port 81, a new web app, and a new app pool. The app pool runs as you so needs your local user credentials.
+Run HttpHandlerWebSite/SetUpWebSite.ps1 as admin. This configures a new website on port 81, a new web app, and a new app pool. The script also builds the Reproducer project and displays the location of the compiled binary.
 
-Run Visual Studio as administrator,  open the solution and run the console app.
+Run the Reproducer application (also as administrator) that the script built and watch the output. You should eventually see `Got the wrong result: This is the default handler`, which means that the bug has occurred.
 
 Explanation
 -----------
@@ -15,5 +15,4 @@ Given the structure of the web.config, it should be impossible for the default h
 
 Reproduced on
 -------------
-* Windows 10
-* Visual Studio 2015 (with and without Update 1)
+* Windows 10 build 10586.
