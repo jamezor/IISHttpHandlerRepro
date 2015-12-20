@@ -1,4 +1,4 @@
-Run HttpHandlerWebSite/SetUpWebSite.ps1 as admin. This configures a new website on port 81 and creates a new web application. The script also builds the Reproducer project and displays the location of the compiled binary.
+Run `HttpHandlerWebSite/SetUpWebSite.ps1` as admin - note that you will need to run `Set-ExecutionPolicy RemoteSigned` before launching the script. This configures a new website on port 81 and creates a new web application. The script also builds the Reproducer project and displays the location of the compiled binary.
 
 Run the Reproducer application (also as administrator) that the script built and watch the output. You should eventually see `Got the wrong result: This is the default handler`, which means that the bug has occurred.
 
@@ -16,3 +16,4 @@ Given the structure of the web.config, it should be impossible for the default h
 Reproduced on
 -------------
 * Freshly installed Windows 10 build 10586.
+* Hyper-V VM with at least 2 vCores.
